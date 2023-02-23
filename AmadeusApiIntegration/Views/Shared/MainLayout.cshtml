@@ -1,0 +1,299 @@
+﻿@model AmadeusApiIntegration.Models.fligSearofferRoot
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@Page.Title</title>
+    @RenderSection("head", required: false)
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="../Scripts/jquery-3.4.1.js"></script>
+    <script src="../Scripts/jquery-3.4.1.min.js"></script>
+    <script src="../Scripts/jquery-ui.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    <title>Booking Form HTML Template</title>
+    <link href="~/Content/jquery-ui.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.min.css.map" rel="stylesheet">
+    <!-- Google font -->
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link type="text/css" rel="stylesheet" href=@Url.Content("/Content/css/bootstrap.min.css") />
+
+    <!-- Custom stlylesheet -->
+    <link type="text/css" rel="stylesheet" href=@Url.Content("/Content/css/style.css") />
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+</head>
+@using (Html.BeginForm("flightAvailableData", "CheckflightAvailablity", FormMethod.Post))
+{
+    <body>
+        @* --------------------------Flight_Search_Section---------------------------------------------------------------------*@
+        <div id="booking" class="section">
+            <div class="section-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="booking-cta">
+                                <h1>Book your flight today</h1>
+                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate laboriosam numquam at</p>
+                            </div>
+                        </div>
+                        <div class="col-md-7 col-md-offset-1">
+                            <div class="booking-form">
+                                <form>
+                                    <div class="form-group">
+                                        <div class="form-checkbox">
+                                            <label for="roundtrip">
+                                                <input type="radio" id="roundtrip" name="flighttype" onclick="IsChecked()" value="false">
+                                                <span></span>Roundtrip
+                                            </label>
+                                            <label for="one-way">
+                                                <input type="radio" id="one-way" name="flighttype" onclick="IsChecked()" value="true">
+                                                <span></span>One way
+                                            </label>
+                                            <label for="multi-city">
+                                                <input type="radio" id="multi-city" name="flighttype" onclick="IsChecked()" value="false">
+                                                <span></span>Multi-City
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <span class="form-label">Flying from</span>
+
+                                                <input style="color:dodgerblue; font-size:16px" name="OriginLocation" class="form-control" type="text" placeholder="City or airport" id="FromCity">
+                                                <p style="color:red" id="AirportName"></p>
+
+                                                @*<input style="visibility:hidden;" id="img" type="image" src="~/Imges/airplane.jpg" width="31" height="30">*@
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <span class="form-label">Flying to</span>
+                                                <input style="color: dodgerblue; font-size: 16px" name="destinationLocation" class="form-control" type="text" placeholder="City or airport" id="ToCity">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <span class="form-label">Departing</span>
+                                                <input class="form-control" type="date" name="Departuredate" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <span class="form-label">Returning</span>
+                                                <input class="form-control" type="date" id="returndate" name="returndate" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <span class="form-label">Adults (18+)</span>
+                                                <select class="form-control" name="travelertypeAdult">
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                    <option>3</option>
+                                                </select>
+                                                <span class="select-arrow"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <span class="form-label">Children (0-17)</span>
+                                                <select class="form-control" name="travelertypechildrent">
+                                                    <option>0</option>
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                </select>
+                                                <span class="select-arrow"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <span class="form-label">Travel class</span>
+                                                <select class="form-control" name="travelclass">
+                                                    <option>Economy class</option>
+                                                    <option>Business class</option>
+                                                    <option>First class</option>
+                                                </select>
+                                                <span class="select-arrow"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-btn">
+                                        <button id="button1" class="submit-btn">Show flights</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @* --------------------------Flight_Search_Section---------------------------------------------------------------------*@
+
+        @*---------------------------Flight_Available_Information_Section------------------------------------------------------*@
+
+
+
+
+        @*---------------------------Flight_Available_Information_Section------------------------------------------------------*@
+
+
+
+
+        @*Ruturn date disable*@
+        <script type="text/javascript">
+            function IsChecked() {
+                if (document.getElementById('one-way').checked) {
+                    document.getElementById('returndate').disabled = true;
+                } else if (document.getElementById('multi-city').checked) {
+                    document.getElementById('returndate').disabled = false;
+                } else {
+                    document.getElementById('returndate').disabled = false;
+                }
+
+            }
+        </script>
+
+        <script>
+            $('#button1').click(function () {
+                var fromCity = $('#FromCity').val();
+                var toCity = $('#ToCity').val();
+                var Departuredate = $('#Departuredate').val();
+                var returndate = $('#returndate').val();
+
+                if (fromCity == '' || toCity == '') {
+                    //swal({
+                    //    title: "Fields Empty!!",
+                    //    text: "Please check the missing fields!",
+                    //    icon: "warning",
+                    //    button: "OK",
+                    //});
+                    swal("Please check the missing fields!");
+                } else if (fromCity == toCity) {
+                    swal({
+                        text: "From & To airports cannot be the same",
+                        icon: "warning",
+                        button: "OK",
+                    });
+                }// else {
+                //    window.location.href = "/Home/flightAvailableData";
+                //}
+            })
+        </script>
+
+
+
+
+
+        @*Droupdown/ Autocomplete js Code*@
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#FromCity").autocomplete({
+                    focus: function (event, ui) {
+                        $(this).val(ui.item.address.cityName + ", " + ui.item.address.countryName);
+                        return false;
+                    },
+                    select: function (event, ui) {
+                        $(this).val(ui.item.address.cityName + " - " + ui.item.address.countryName + ", " + ui.item.iataCode);
+                        return false;
+                    },
+
+                    source: function (request, response) {
+                        $.ajax({
+                            url: "/CheckflightAvailablity/SearchAirportCity",
+                            type: "POST",
+                            dataType: "json",
+                            data: { IATAcode: request.term },
+                            success: function (data) {
+                                response(data);
+
+                            }
+
+                        })
+
+                    },
+
+                    messages: {
+                        noResults: "", results: ""
+                    }
+
+                })
+                    .autocomplete("instance")._renderItem = function (ul, item) {
+                        return $("<li>")
+                            /*.append($("$airplane").attr("src", "Imges/" + "airplane.jpg"))*/
+                            /*.append("<img src=~/Imges/airplane.jpg"+"alt="+".png"+"/>")*/
+                            .append("<div>" + item.address.cityName + " - " + item.address.countryName + ",  " + "<b style=color:#9b9b9b>" + item.iataCode + "</b>" + "<br>" + "<p style=color:#9b9b9b>" + item.name + "</p>" + "</div>")
+                            .appendTo(ul);
+                    }
+            });
+        </script>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+
+                $("#ToCity").autocomplete({
+                    focus: function (event, ui) {
+                        $(this).val(ui.item.address.cityName + ", " + ui.item.address.countryName);
+                        return false;
+                    },
+                    select: function (event, ui) {
+                        $(this).val(ui.item.address.cityName + " - " + ui.item.address.countryName + "," + ui.item.iataCode);
+
+                        return false;
+                    },
+
+
+                    source: function (request, response) {
+                        $.ajax({
+                            url: "/CheckflightAvailablity/SearchAirportCity",
+                            type: "POST",
+                            dataType: "json",
+                            data: { IATAcode: request.term },
+                            success: function (data) {
+                                response(data);
+
+                            }
+
+                        })
+
+                    },
+
+                    messages: {
+                        noResults: "", results: ""
+                    }
+
+                })
+                    .autocomplete("instance")._renderItem = function (ul, item) {
+                        return $("<li>")
+                            .append("<div>" + item.address.cityName + " - " + item.address.countryName + ",  " + "<b style=color:#9b9b9b>" + item.iataCode + "</b>" + "<br>" + "<p style=color:#9b9b9b>" + item.name + "</p>" + "</div>")
+                            .appendTo(ul);
+                    }
+            });
+        </script>
+
+
+        @RenderBody()
+    </body>
+}
+
+
+</html>

@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32616.157
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmadeusApiIntegration", "AmadeusApiIntegration\AmadeusApiIntegration.csproj", "{15EAB068-8624-4B8B-BBE5-2AF7417279B3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{15EAB068-8624-4B8B-BBE5-2AF7417279B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15EAB068-8624-4B8B-BBE5-2AF7417279B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15EAB068-8624-4B8B-BBE5-2AF7417279B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15EAB068-8624-4B8B-BBE5-2AF7417279B3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FD78C59A-7A9C-499A-A87E-B2C76861BDBD}
+	EndGlobalSection
+EndGlobal

@@ -7,47 +7,103 @@
 }
 
 
-        @*---------------------------Flight_Available_Information_Section------------------------------------------------------*@
-        <br /><br /><br /><br />
+@*---------------------------Flight_Available_Information_Section------------------------------------------------------*@
+<br /><br />
 
-        <div style="margin:0;margin-left:1%;margin-bottom:4%" class="row text-center">
-            <div class="col-md-2">
-                <b><p style="font-size:15px">Popular Filters </p></b>
-            </div>
-            <div style="font-size:medium" class="form-check form-check-inline col-md-2">
-                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" name="selectedValue" value="true">
-                <label style="font-size: small; font-weight: 100;" class="form-check-label" for="inlineCheckbox1">Non Stop</label>
-            </div>
-            <div style="font-size:medium" class="form-check form-check-inline col-md-1">
-                <input class="form-check-input" type="checkbox" name="selectedValue" id="inlineCheckbox2" value="false">
-                <label style="font-size: small; font-weight: 100;" class="form-check-label" for="inlineCheckbox2">1 Stop</label>
-            </div>
-            <div style="font-size:medium" class="form-check form-check-inline col-md-2">
-                <input class="form-check-input" type="checkbox" name="selectedValue" id="inlineCheckbox2" value="cheapprice">
-                <label style="font-size: small; font-weight: 100;" class="form-check-label" for="inlineCheckbox2">Cheapest Price</label>
-            </div>
-            <div class="col-md-1">
-               <button type="button" id="filtereddatabtn">filter</button>
+      <div style="margin-left:4%">
+          <h4 style="font-weight: 600; color: #579cc4; font-stretch: unset;"><i class='fa fa-plane fa-2x  fa-pulse' style='color:#57595b'></i>&nbsp;&nbsp;<u>FLIGHTS FROM @ViewData["OriginLocation"] TO @ViewData["destinationLocation"]</u></h4>
+      </div>
 
-            </div>
+<br /><br /><br />
+
+@using (Html.BeginForm("Appliedfilter", "CheckflightAvailablity", FormMethod.Post))
+{
+    <div style="margin:0;margin-left:1%;margin-bottom:4%" class="row text-center">
+        <div class="col-md-2">
+            <b><p style="font-size:15px">Popular Filters </p></b>
         </div>
+        <div style="font-size:medium" class="form-check form-check-inline col-md-2">
+            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" name="selectedValue" value="true">
+            <label style="font-size: small; font-weight: 100;" class="form-check-label" for="inlineCheckbox1">Non Stop</label>
+        </div>
+        <div style="font-size:medium" class="form-check form-check-inline col-md-1">
+            <input class="form-check-input" type="checkbox" name="selectedValue" id="inlineCheckbox2" value="false">
+            <label style="font-size: small; font-weight: 100;" class="form-check-label" for="inlineCheckbox2">1 Stop</label>
+        </div>
+        <div style="font-size:medium" class="form-check form-check-inline col-md-2">
+            <input class="form-check-input" type="checkbox" name="selectedValue" id="inlineCheckbox2" value="cheapprice">
+            <label style="font-size: small; font-weight: 100;" class="form-check-label" for="inlineCheckbox2">Cheapest Price</label>
+        </div>
+        <div class="col-md-1">
+          <input type="submit" id="filtereddatabtn" value="filter">  
+
+        </div>
+    </div>
+}
 
 
 
 
-        @*With Ruturn Date*@
 
-        @*@{int i = 0; }*@
+@*With Ruturn Date*@
+
+@*@{int i = 0; }*@
 
 <div id="Maindiv">
 
     @if (Model != null)
     {
+
+
         <div class="loader">
             Loading.....
         </div>
+
+        if (Model.data.Where(x => x.itineraries.Count() == 1).Any())
+        {
+            <div style="margin-left:5%; margin-right: 5%; " class="row text-center">
+                @*<div class="col-md-2">
+                        <span style="font-size:16px"><b>Airline</b></span>
+                    </div>*@
+                <div class="col-md-2">
+                    <span style="font-size:16px">
+                        <b> Aircraft </b>
+                    </span>
+                </div>
+                <div class="col-md-2">
+                    <span style="font-size:16px">
+                        <b> Departure </b>
+                    </span>
+                </div>
+                <div class="col-md-2">
+                    <span style="font-size:16px">
+                        <b> Duration </b>
+                    </span>
+                </div>
+                <div class="col-md-2">
+                    <span style="font-size:16px">
+                        <b> Arrival </b>
+                    </span>
+                </div>
+                <div class="col-md-2">
+                    <span style="font-size:16px">
+                        <b> Price </b>
+                    </span>
+                </div>
+                <div class="col-md-2">
+                </div>
+            </div>
+            <hr />
+            <br />
+
+
+        }
+
+
+
         foreach (var item in Model.data)
         {
+
             if (item.itineraries.Count() > 1)
             {
 
@@ -136,40 +192,6 @@
             }
             else
             {
-
-
-                <div style="margin-left:5%; margin-right: 5%; " class="row text-center">
-                    @*<div class="col-md-2">
-                            <span style="font-size:16px"><b>Airline</b></span>
-                        </div>*@
-                    <div class="col-md-2">
-                        <span style="font-size:16px">
-                            <b> Aircraft </b>
-                        </span>
-                    </div>
-                    <div class="col-md-2">
-                        <span style="font-size:16px">
-                            <b> Departure </b>
-                        </span>
-                    </div>
-                    <div class="col-md-2">
-                        <span style="font-size:16px">
-                            <b> Duration </b>
-                        </span>
-                    </div>
-                    <div class="col-md-2">
-                        <span style="font-size:16px">
-                            <b> Arrival </b>
-                        </span>
-                    </div>
-                    <div class="col-md-2">
-                        <span style="font-size:16px">
-                            <b> Price </b>
-                        </span>
-                    </div>
-                    <div class="col-md-2">
-                    </div>
-                </div><hr /><br />
 
                 foreach (var itineraries in item.itineraries)
                 {
@@ -292,76 +314,76 @@
                 }
             }
         }
-        
+
     }
     else
     {
-        <h2> Model is null </h2>
+        <h2> Oops, no flights are available. </h2>
     }
 
 
 </div>
-         
-        
 
 
-        @*---------------------------Flight_Available_Information_Section------------------------------------------------------*@
-
-        <script type="text/javascript">
-            $(function () {
-                $(".loader").hide();
-            });
-        </script>
-
-        
-
-        <script>
-            var div = document.getElementById("carddata");
-            var display = 0;
-            function HideShow() {
-                if (display == 1) {
-                    div.style.display = "block";
-                    display = 0;
-                } else {
-                    div.style.display = "none";
-                    display = 1;
-                }
-            }
 
 
-        </script>
+@*---------------------------Flight_Available_Information_Section------------------------------------------------------*@
+
+<script type="text/javascript">
+    $(function () {
+        $(".loader").hide();
+    });
+</script>
 
 
-       
 
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $("#filtereddatabtn").click(function () {
-                    $('input[name="selectedValue"]:checked').each(function () {
-                       
-                        $.ajax(
-                            {
-                                type: "POST", //HTTP GET Method
-                                url: "Appliedfilter", // Controller/View
-                                data: { //Passing data
-                                    checkboxvalue: this.value //Reading text box values using Jquery
+<script>
+    var div = document.getElementById("carddata");
+    var display = 0;
+    function HideShow() {
+        if (display == 1) {
+            div.style.display = "block";
+            display = 0;
+        } else {
+            div.style.display = "none";
+            display = 1;
+        }
+    }
 
-                                }
-                                //success: function (data) {
-                                //    $('#Maindiv').html(" ");
-                                //    $('#Maindiv').html(data);
-                                //}
-                                    
-                            })
-                    })
+
+</script>
+
+
+
+
+@*<script type="text/javascript">
+        $(document).ready(function () {
+            $("#filtereddatabtn").click(function () {
+                $('input[name="selectedValue"]:checked').each(function () {
+
+                    $.ajax(
+                        {
+                            type: "POST", //HTTP GET Method
+                            url: "Appliedfilter", // Controller/View
+                            data: { //Passing data
+                                checkboxvalue: this.value //Reading text box values using Jquery
+
+                            }
+                            //success: function (data) {
+                            //    $('#Maindiv').html(" ");
+                            //    $('#Maindiv').html(data);
+                            //}
+
+                        })
                 })
-            });
-        </script>
+            })
+        });
+    </script>*@
 
 
-       
 
-       
+
+
 
 
 

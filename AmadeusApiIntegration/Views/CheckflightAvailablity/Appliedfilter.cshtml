@@ -2,10 +2,291 @@
 
 @{
     ViewBag.Title = "Appliedfilter";
-    //Layout = "~/Views/Shared/MainLayout.cshtml";
+    Layout = "~/Views/Shared/MainLayout.cshtml";
 }
 
-<h2>Appliedfilter</h2>
+<br />
+<br />
+<div style="margin-left:4%">
+    <h4 style="font-weight: 600; color: #579cc4; font-stretch: unset;"><i class='fa fa-plane fa-2x  fa-pulse' style='color:#57595b'></i>&nbsp;&nbsp;<u>FLIGHTS FROM @ViewData["Originlocation"] TO @ViewData["Destinationlocation"]</u></h4>
+</div>
+<br />
+<br />
+<br />
 
-<h6>This is new </h6>
-<p>This is paragraph</p>
+@if (Model != null)
+{
+    <div class="loader">
+        Loading.....
+    </div>
+
+    if (Model.data.Where(x => x.itineraries.Count()==1).Any())
+    {
+        <div style="margin-left:5%; margin-right: 5%; " class="row text-center">
+            @*<div class="col-md-2">
+                    <span style="font-size:16px"><b>Airline</b></span>
+                </div>*@
+            <div class="col-md-2">
+                <span style="font-size:16px">
+                    <b> Aircraft </b>
+                </span>
+            </div>
+            <div class="col-md-2">
+                <span style="font-size:16px">
+                    <b> Departure </b>
+                </span>
+            </div>
+            <div class="col-md-2">
+                <span style="font-size:16px">
+                    <b> Duration </b>
+                </span>
+            </div>
+            <div class="col-md-2">
+                <span style="font-size:16px">
+                    <b> Arrival </b>
+                </span>
+            </div>
+            <div class="col-md-2">
+                <span style="font-size:16px">
+                    <b> Price </b>
+                </span>
+            </div>
+            <div class="col-md-2">
+            </div>
+        </div>
+        <hr />
+        <br />
+
+
+    }
+
+
+    foreach (var item in Model.data)
+    {
+        if (item.itineraries.Count() > 1)
+        {
+
+
+            <div style="margin-left: 0; margin-right: 0; " id="mydiv1" class="row text-center table-striped">
+                <div style="border: 2px solid darkgrey;border-radius:11px; display: inline-block; width: 90%; /* margin-top: 2%; */ padding-top: 2%; padding-bottom:1%; " class="card">
+
+                    @foreach (var itineraries1 in item.itineraries[0].segments)
+                    {
+
+                        <div class="col-md-5">
+
+                            <p style="font-weight:600">Departure </p><br />
+                            <div class="col-md-3">
+                                <span><option value="@itineraries1.departure.iataCode">@itineraries1.departure.iataCode</option></span>
+                                <span style="padding-bottom:30px;"><option value="@itineraries1.departure.at">@itineraries1.departure.at</option></span><br />
+
+                            </div>
+                            <div style="margin-left:50px" class="col-md-2">
+                                <span><option value="@itineraries1.duration">@itineraries1.duration</option></span>
+                                <span><hr style="border-top: 4px solid cornflowerblue; width: 90px; margin-bottom:2px;margin-top:2px;" /></span>
+                                <span style="padding-bottom:30px;"><option style="font-size:11px;" value="@itineraries1.numberOfStops"><p style="font-size:10px">numberOfStops @itineraries1.numberOfStops</p></option></span><br />
+
+                            </div>
+                            <div style="margin-left:40px" class="col-md-3">
+                                <span><option value="@itineraries1.arrival.iataCode">@itineraries1.arrival.iataCode</option></span>
+                                <span style="padding-bottom:30px;"><option value="@itineraries1.arrival.at">@itineraries1.arrival.at</option></span><br />
+
+                            </div>
+
+                        </div>
+
+
+
+                    }
+                    @*<div style="border-left: 2px solid black; margin-left: 3%; height: 90px;" class="col-md-1"></div>*@
+
+                    @foreach (var itineraries2 in item.itineraries[1].segments)
+                    {
+
+
+                        <div class="col-md-5">
+
+                            <p style="font-weight:600">Return </p><br />
+                            <div class="col-md-3">
+                                <span><option value="@itineraries2.departure.iataCode">@itineraries2.departure.iataCode</option></span>
+                                <span style="padding-bottom:30px;"><option value="@itineraries2.departure.at">@itineraries2.departure.at</option></span><br />
+
+                            </div>
+                            <div style="margin-left:50px" class="col-md-2">
+                                <span><option value="@itineraries2.duration">@itineraries2.duration</option></span>
+                                <span><hr style="border-top: 4px solid cornflowerblue; width: 90px; margin-bottom:2px;margin-top:2px;" /></span>
+                                <span style="padding-bottom:30px;"><option style="font-size:11px;" value="@itineraries2.numberOfStops"><p style="font-size:10px">numberOfStops @itineraries2.numberOfStops</p></option></span><br />
+
+                            </div>
+                            <div style="margin-left:40px" class="col-md-3">
+                                <span><option value="@itineraries2.arrival.iataCode">@itineraries2.arrival.iataCode</option></span>
+                                <span style="padding-bottom:30px;"><option value="@itineraries2.arrival.at">@itineraries2.arrival.at</option></span><br />
+
+                            </div>
+
+                        </div>
+
+
+
+                    }
+                    @*<div style="border-left: 2px solid black; margin-left:3%; height: 90px;" class="col-md-1"></div>*@
+                    <div class="col-md-2">
+
+                        <span><option style="font-weight:700; color:black " value="@item.price.grandTotal">₹ @item.price.grandTotal</option></span>
+
+                    </div>
+
+                    <div class="col-md-2">
+
+                        <button style="background-color: #fff; border-radius: 18px; border: 1px solid #008cff; color: #008cff; font-weight: 700; padding: 5px 15px; height: 30px;" class="btn btn-primary" onclick="HideShow()" role="button">
+                            View Flight Details
+                        </button>
+                        <br /><br />
+                        <button style="background-image: linear-gradient(97deg,#53b2fe,#065af3 130%); padding: 5px 43px; border-radius: 15px; " class="btn btn-primary" onclick="HideShow()" role="button">
+                            Book Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+
+
+
+
+            foreach (var itineraries in item.itineraries)
+            {
+                <div style="margin-left: 0; margin-right: 0; " id="mydiv1" class="row text-center table-striped">
+                    <div style="border: 2px solid darkgrey;border-radius:11px; display: inline-block; width: 90%; /* margin-top: 2%; */ padding-top: 2%; padding-bottom:1%; " class="card">
+                        <div class="card-body">
+
+                            <div class="col-md-2">
+
+                                @using System.Linq
+                                @{var lstaircraftcode = (from x in itineraries.segments select new { carriercode = x.carrierCode, code = x.aircraft.code }).ToList(); }
+                                @{var lstac1 = lstaircraftcode.ToList();
+                                }
+                                @{var lstac2 = lstaircraftcode.ToList().Skip(2).Take(4);
+                                }
+                                @foreach (var showaircraftCodes in lstac1)
+                                {
+                                    <span style="padding-bottom:30px;"><option value="@showaircraftCodes.code"> @showaircraftCodes.carriercode - @showaircraftCodes.code </option></span><br /><br />
+
+                                }
+                                @foreach (var showaircraftCodes in lstac2)
+                                {
+                                    //string aircraftid = "aircraft" + i;
+                                    <div class="carddata" id="carddata">
+                                        <div class="card-body">
+                                            <span style="padding-bottom:30px;"><option value="@showaircraftCodes.code"> @showaircraftCodes.carriercode - @showaircraftCodes.code </option></span><br /><br />
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+
+                            <div class="col-md-2">
+                                @using System.Linq
+                                @{var lstdeparture = (from x in itineraries.segments select new { iatacode = x.departure.iataCode, at = x.departure.at }).ToList(); }
+                                @{var lstdep1 = lstdeparture.ToList().Take(1); }
+                                @{var lstdep2 = lstdeparture.ToList().Skip(1).Take(2); }
+                                @foreach (var showdeparturedata in lstdep1)
+                                {
+                                    <span><option value="@showdeparturedata.iatacode"> @showdeparturedata.iatacode </option></span>
+                                    <span style="padding-bottom:30px;"><option value="@showdeparturedata.at"> @showdeparturedata.at </option></span><br />
+
+                                }
+                                @foreach (var showdeparturedata in lstdep2)
+                                {
+                                    <div class="carddata" id="carddata">
+                                        <div class="card-body">
+                                            <span><option value="@showdeparturedata.iatacode"> @showdeparturedata.iatacode </option></span>
+                                            <span style="padding-bottom:30px;"><option value="@showdeparturedata.at"> @showdeparturedata.at </option></span><br />
+                                        </div>
+                                    </div>
+                                }
+
+                            </div>
+                            <div class="col-md-2">
+                                @using System.Linq
+                                @{ var lsttotalduration = (from x in itineraries.segments select new { noofstops = x.numberOfStops, stopduration = x.duration }).ToList(); }
+                                @{ var totalStops = lsttotalduration.Count() - 1; }
+                                @{ var lstns1 = lsttotalduration.ToList().Take(1); }
+                                @{ var lstns2 = lsttotalduration.ToList().Skip(1).Take(2); }
+                                @foreach (var shownoofstopsdata in lstns1)
+                                {
+                                    <span><option value="@itineraries.duration"> @itineraries.duration </option></span>
+                                    <span><hr style="border-top: 4px solid cornflowerblue; width: 90px; margin-bottom:2px;margin-top:2px;" /></span>
+                                    <span style="padding-bottom:30px;"><option style="font-size:11px;" value="@totalStops"><p style="font-size:10px"> numberOfStops @totalStops </p></option></span><br />
+
+                                }
+                                @foreach (var shownoofstopsdata in lstns2)
+                                {
+                                    <div class="carddata" id="carddata">
+                                        <div class="card-body">
+                                            <span><option value="@shownoofstopsdata.stopduration"> @shownoofstopsdata.stopduration </option></span>
+                                            <span><hr style="border-top: 4px solid cornflowerblue; width: 90px; margin-bottom:2px;margin-top:2px;" /></span>
+                                            <span style="padding-bottom:30px;"><option style="font-size:11px;" value="@shownoofstopsdata.noofstops"><p style="font-size:10px"> numberOfStops @shownoofstopsdata.noofstops </p></option></span><br />
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <div class="col-md-2">
+                                @using System.Linq
+                                @{ var lstarrive = (from x in itineraries.segments select new { iatacode = x.arrival.iataCode, at = x.arrival.at }).ToList(); }
+                                @{ var lstar1 = lstarrive.ToList().Take(1); }
+                                @{ var lstar2 = lstarrive.ToList().Skip(1).Take(2); }
+                                @foreach (var showarrivedata in lstar1)
+                                {
+
+                                    <span><option value="@showarrivedata.iatacode"> @showarrivedata.iatacode </option></span>
+                                    <span style="padding-bottom:30px;"><option value="@showarrivedata.at"> @showarrivedata.at </option></span><br />
+
+                                }
+                                @foreach (var showarrivedata in lstar2)
+                                {
+                                    <div class="carddata" id="carddata">
+                                        <div class="card-body">
+                                            <span><option value="@showarrivedata.iatacode"> @showarrivedata.iatacode </option></span>
+                                            <span style="padding-bottom:30px;"><option value="@showarrivedata.at"> @showarrivedata.at </option></span><br />
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <div class="col-md-2">
+
+                                <span><option style="font-weight:700; color:black " value="@item.price.grandTotal">₹ @item.price.grandTotal </option></span>
+
+                            </div>
+
+                            <div class="col-md-2">
+
+                                <button style="background-color: #fff; border-radius: 18px; border: 1px solid #008cff; color: #008cff; font-weight: 700; padding: 5px 15px; height: 30px;" class="btn btn-primary" onclick="HideShow()" role="button">
+                                    View Flight Details
+                                </button>
+                                <br /><br />
+                                <button style="background-image: linear-gradient(97deg,#53b2fe,#065af3 130%); padding: 5px 43px; border-radius: 15px; " class="btn btn-primary" onclick="HideShow()" role="button">
+                                    Book Now
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            }
+        }
+    }
+
+}
+else
+{
+    <h2> Oops, no flights are available. </h2>
+}
+<br />
+<a style="margin-left:4%" href="/CheckflightAvailablity/flightAvailableData"><h5>Back to Page</h5></a>
+
+<script type="text/javascript">
+    $(function () {
+        $(".loader").hide();
+    });
+</script>

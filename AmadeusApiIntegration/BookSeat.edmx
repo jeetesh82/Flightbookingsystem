@@ -1,0 +1,270 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="FlightBookingSystemModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="flightDetails">
+          <Key>
+            <PropertyRef Name="travelerId" />
+          </Key>
+          <Property Name="travelerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Origin_Location" Type="varchar" MaxLength="50" />
+          <Property Name="From_Date&amp;Time" Type="datetime" />
+          <Property Name="Destination_Location" Type="varchar" MaxLength="50" />
+          <Property Name="To_Date&amp;Time" Type="datetime" />
+          <Property Name="Airline_Code" Type="varchar" MaxLength="50" />
+          <Property Name="Aircraft_Code" Type="varchar" MaxLength="50" />
+          <Property Name="number" Type="int" />
+          <Property Name="class" Type="varchar" MaxLength="50" />
+          <Property Name="flightOfferId" Type="int" />
+          <Property Name="segmentId" Type="int" />
+        </EntityType>
+        <EntityType Name="SeatAvailabilityDetails">
+          <Key>
+            <PropertyRef Name="travelerId" />
+          </Key>
+          <Property Name="travelerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="segmentId" Type="int" />
+          <Property Name="flightOfferId" Type="int" />
+          <Property Name="cabin" Type="varchar" MaxLength="200" />
+          <Property Name="Seat_Number" Type="varchar" MaxLength="50" />
+          <Property Name="Seat_total_Price" Type="varchar" MaxLength="50" />
+          <Property Name="Seat_base_Price" Type="varchar" MaxLength="50" />
+          <Property Name="Taxes_Amount" Type="varchar" MaxLength="50" />
+          <Property Name="coordinates" Type="varchar" MaxLength="50" />
+          <Property Name="seatAvailabilityStatus" Type="varchar(max)" />
+        </EntityType>
+        <EntityType Name="SeatMap_deckConfiguration">
+          <Key>
+            <PropertyRef Name="travelerId" />
+          </Key>
+          <Property Name="travelerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="segmentId" Type="int" />
+          <Property Name="flightOfferId" Type="int" />
+          <Property Name="deckType" Type="varchar" MaxLength="50" />
+          <Property Name="width" Type="int" />
+          <Property Name="length" Type="int" />
+          <Property Name="startSeatRow" Type="int" />
+          <Property Name="endSeatRow" Type="int" />
+          <Property Name="startWingsX" Type="int" />
+          <Property Name="endWingsX" Type="int" />
+          <Property Name="startWingsRow" Type="int" />
+          <Property Name="endWingsRow" Type="int" />
+          <Property Name="exitRowsX" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_SeatAvailabilityDetails_flightDetails">
+          <End Role="flightDetails" Type="Self.flightDetails" Multiplicity="1" />
+          <End Role="SeatAvailabilityDetails" Type="Self.SeatAvailabilityDetails" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="flightDetails">
+              <PropertyRef Name="travelerId" />
+            </Principal>
+            <Dependent Role="SeatAvailabilityDetails">
+              <PropertyRef Name="travelerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SeatMap_deckConfiguration_SeatMap_deckConfiguration">
+          <End Role="flightDetails" Type="Self.flightDetails" Multiplicity="1" />
+          <End Role="SeatMap_deckConfiguration" Type="Self.SeatMap_deckConfiguration" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="flightDetails">
+              <PropertyRef Name="travelerId" />
+            </Principal>
+            <Dependent Role="SeatMap_deckConfiguration">
+              <PropertyRef Name="travelerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="FlightBookingSystemModelStoreContainer">
+          <EntitySet Name="flightDetails" EntityType="Self.flightDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SeatAvailabilityDetails" EntityType="Self.SeatAvailabilityDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SeatMap_deckConfiguration" EntityType="Self.SeatMap_deckConfiguration" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_SeatAvailabilityDetails_flightDetails" Association="Self.FK_SeatAvailabilityDetails_flightDetails">
+            <End Role="flightDetails" EntitySet="flightDetails" />
+            <End Role="SeatAvailabilityDetails" EntitySet="SeatAvailabilityDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SeatMap_deckConfiguration_SeatMap_deckConfiguration" Association="Self.FK_SeatMap_deckConfiguration_SeatMap_deckConfiguration">
+            <End Role="flightDetails" EntitySet="flightDetails" />
+            <End Role="SeatMap_deckConfiguration" EntitySet="SeatMap_deckConfiguration" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="FlightBookingSystemModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="flightDetail">
+          <Key>
+            <PropertyRef Name="travelerId" />
+          </Key>
+          <Property Name="travelerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Origin_Location" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="From_Date_Time" Type="DateTime" Precision="3" />
+          <Property Name="Destination_Location" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="To_Date_Time" Type="DateTime" Precision="3" />
+          <Property Name="Airline_Code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Aircraft_Code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="number" Type="Int32" />
+          <Property Name="class" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="flightOfferId" Type="Int32" />
+          <Property Name="segmentId" Type="Int32" />
+          <NavigationProperty Name="SeatAvailabilityDetail" Relationship="Self.FK_SeatAvailabilityDetails_flightDetails" FromRole="flightDetails" ToRole="SeatAvailabilityDetails" />
+          <NavigationProperty Name="SeatMap_deckConfiguration" Relationship="Self.FK_SeatMap_deckConfiguration_SeatMap_deckConfiguration" FromRole="flightDetails" ToRole="SeatMap_deckConfiguration" />
+        </EntityType>
+        <EntityType Name="SeatAvailabilityDetail">
+          <Key>
+            <PropertyRef Name="travelerId" />
+          </Key>
+          <Property Name="travelerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="segmentId" Type="Int32" />
+          <Property Name="flightOfferId" Type="Int32" />
+          <Property Name="cabin" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Seat_Number" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Seat_total_Price" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Seat_base_Price" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Taxes_Amount" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="coordinates" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="seatAvailabilityStatus" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="flightDetail" Relationship="Self.FK_SeatAvailabilityDetails_flightDetails" FromRole="SeatAvailabilityDetails" ToRole="flightDetails" />
+        </EntityType>
+        <EntityType Name="SeatMap_deckConfiguration">
+          <Key>
+            <PropertyRef Name="travelerId" />
+          </Key>
+          <Property Name="travelerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="segmentId" Type="Int32" />
+          <Property Name="flightOfferId" Type="Int32" />
+          <Property Name="deckType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="width" Type="Int32" />
+          <Property Name="length" Type="Int32" />
+          <Property Name="startSeatRow" Type="Int32" />
+          <Property Name="endSeatRow" Type="Int32" />
+          <Property Name="startWingsX" Type="Int32" />
+          <Property Name="endWingsX" Type="Int32" />
+          <Property Name="startWingsRow" Type="Int32" />
+          <Property Name="endWingsRow" Type="Int32" />
+          <Property Name="exitRowsX" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="flightDetail" Relationship="Self.FK_SeatMap_deckConfiguration_SeatMap_deckConfiguration" FromRole="SeatMap_deckConfiguration" ToRole="flightDetails" />
+        </EntityType>
+        <Association Name="FK_SeatAvailabilityDetails_flightDetails">
+          <End Role="flightDetails" Type="Self.flightDetail" Multiplicity="1" />
+          <End Role="SeatAvailabilityDetails" Type="Self.SeatAvailabilityDetail" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="flightDetails">
+              <PropertyRef Name="travelerId" />
+            </Principal>
+            <Dependent Role="SeatAvailabilityDetails">
+              <PropertyRef Name="travelerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SeatMap_deckConfiguration_SeatMap_deckConfiguration">
+          <End Role="flightDetails" Type="Self.flightDetail" Multiplicity="1" />
+          <End Role="SeatMap_deckConfiguration" Type="Self.SeatMap_deckConfiguration" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="flightDetails">
+              <PropertyRef Name="travelerId" />
+            </Principal>
+            <Dependent Role="SeatMap_deckConfiguration">
+              <PropertyRef Name="travelerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="FlightBookingSystemEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="flightDetails" EntityType="Self.flightDetail" />
+          <EntitySet Name="SeatAvailabilityDetails" EntityType="Self.SeatAvailabilityDetail" />
+          <EntitySet Name="SeatMap_deckConfiguration" EntityType="Self.SeatMap_deckConfiguration" />
+          <AssociationSet Name="FK_SeatAvailabilityDetails_flightDetails" Association="Self.FK_SeatAvailabilityDetails_flightDetails">
+            <End Role="flightDetails" EntitySet="flightDetails" />
+            <End Role="SeatAvailabilityDetails" EntitySet="SeatAvailabilityDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SeatMap_deckConfiguration_SeatMap_deckConfiguration" Association="Self.FK_SeatMap_deckConfiguration_SeatMap_deckConfiguration">
+            <End Role="flightDetails" EntitySet="flightDetails" />
+            <End Role="SeatMap_deckConfiguration" EntitySet="SeatMap_deckConfiguration" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="FlightBookingSystemModelStoreContainer" CdmEntityContainer="FlightBookingSystemEntities">
+          <EntitySetMapping Name="flightDetails">
+            <EntityTypeMapping TypeName="FlightBookingSystemModel.flightDetail">
+              <MappingFragment StoreEntitySet="flightDetails">
+                <ScalarProperty Name="travelerId" ColumnName="travelerId" />
+                <ScalarProperty Name="Origin_Location" ColumnName="Origin_Location" />
+                <ScalarProperty Name="From_Date_Time" ColumnName="From_Date&amp;Time" />
+                <ScalarProperty Name="Destination_Location" ColumnName="Destination_Location" />
+                <ScalarProperty Name="To_Date_Time" ColumnName="To_Date&amp;Time" />
+                <ScalarProperty Name="Airline_Code" ColumnName="Airline_Code" />
+                <ScalarProperty Name="Aircraft_Code" ColumnName="Aircraft_Code" />
+                <ScalarProperty Name="number" ColumnName="number" />
+                <ScalarProperty Name="class" ColumnName="class" />
+                <ScalarProperty Name="flightOfferId" ColumnName="flightOfferId" />
+                <ScalarProperty Name="segmentId" ColumnName="segmentId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SeatAvailabilityDetails">
+            <EntityTypeMapping TypeName="FlightBookingSystemModel.SeatAvailabilityDetail">
+              <MappingFragment StoreEntitySet="SeatAvailabilityDetails">
+                <ScalarProperty Name="travelerId" ColumnName="travelerId" />
+                <ScalarProperty Name="segmentId" ColumnName="segmentId" />
+                <ScalarProperty Name="flightOfferId" ColumnName="flightOfferId" />
+                <ScalarProperty Name="cabin" ColumnName="cabin" />
+                <ScalarProperty Name="Seat_Number" ColumnName="Seat_Number" />
+                <ScalarProperty Name="Seat_total_Price" ColumnName="Seat_total_Price" />
+                <ScalarProperty Name="Seat_base_Price" ColumnName="Seat_base_Price" />
+                <ScalarProperty Name="Taxes_Amount" ColumnName="Taxes_Amount" />
+                <ScalarProperty Name="coordinates" ColumnName="coordinates" />
+                <ScalarProperty Name="seatAvailabilityStatus" ColumnName="seatAvailabilityStatus" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SeatMap_deckConfiguration">
+            <EntityTypeMapping TypeName="FlightBookingSystemModel.SeatMap_deckConfiguration">
+              <MappingFragment StoreEntitySet="SeatMap_deckConfiguration">
+                <ScalarProperty Name="travelerId" ColumnName="travelerId" />
+                <ScalarProperty Name="segmentId" ColumnName="segmentId" />
+                <ScalarProperty Name="flightOfferId" ColumnName="flightOfferId" />
+                <ScalarProperty Name="deckType" ColumnName="deckType" />
+                <ScalarProperty Name="width" ColumnName="width" />
+                <ScalarProperty Name="length" ColumnName="length" />
+                <ScalarProperty Name="startSeatRow" ColumnName="startSeatRow" />
+                <ScalarProperty Name="endSeatRow" ColumnName="endSeatRow" />
+                <ScalarProperty Name="startWingsX" ColumnName="startWingsX" />
+                <ScalarProperty Name="endWingsX" ColumnName="endWingsX" />
+                <ScalarProperty Name="startWingsRow" ColumnName="startWingsRow" />
+                <ScalarProperty Name="endWingsRow" ColumnName="endWingsRow" />
+                <ScalarProperty Name="exitRowsX" ColumnName="exitRowsX" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

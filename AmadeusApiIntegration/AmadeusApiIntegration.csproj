@@ -50,6 +50,12 @@
     <Reference Include="BouncyCastle.Crypto, Version=1.9.0.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
       <HintPath>..\packages\Portable.BouncyCastle.1.9.0\lib\net40\BouncyCastle.Crypto.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Google.Protobuf, Version=3.19.4.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
       <HintPath>..\packages\Google.Protobuf.3.19.4\lib\net45\Google.Protobuf.dll</HintPath>
     </Reference>
@@ -123,6 +129,7 @@
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.5.0.0\lib\net45\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Security.Cryptography.Algorithms, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net463\System.Security.Cryptography.Algorithms.dll</HintPath>
       <Private>True</Private>
@@ -228,8 +235,27 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="BookSeat.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BookSeat.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BookSeat.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BookSeat.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BookSeat.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BookSeat.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\CheckflightAvailablityController.cs" />
+    <Compile Include="Controllers\FlightBookingdetailsController.cs" />
     <Compile Include="Controllers\SeatMapController.cs" />
+    <Compile Include="flightDetail.cs">
+      <DependentUpon>BookSeat.tt</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -239,11 +265,31 @@
     <Compile Include="Models\SearchAirCityResponse.cs" />
     <Compile Include="Models\SearchFligAviRequest.cs" />
     <Compile Include="Models\SearchFlightAviResponse.cs" />
-    <Compile Include="Models\SeatMapApiRequest.cs" />
-    <Compile Include="Models\SeatMapApiResponse.cs" />
+    <Compile Include="Models\SeatMapApiHelperRequest.cs" />
+    <Compile Include="Models\SeatMapApiHelperResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SeatAvailabilityDetail.cs">
+      <DependentUpon>BookSeat.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SeatMap_deckConfiguration.cs">
+      <DependentUpon>BookSeat.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\Seatbooking.mdf" />
+    <Content Include="App_Data\Seatbooking_log.ldf">
+      <DependentUpon>Seatbooking.mdf</DependentUpon>
+    </Content>
+    <Content Include="BookSeat.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>BookSeat.Context.cs</LastGenOutput>
+      <DependentUpon>BookSeat.edmx</DependentUpon>
+    </Content>
+    <Content Include="BookSeat.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>BookSeat.edmx</DependentUpon>
+      <LastGenOutput>BookSeat.cs</LastGenOutput>
+    </Content>
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -270,6 +316,13 @@
     <Content Include="fonts\fontawesome-webfont.woff" />
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.eot" />
+    <EntityDeploy Include="BookSeat.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>BookSeat.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="BookSeat.edmx.diagram">
+      <DependentUpon>BookSeat.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -297,11 +350,10 @@
     <Content Include="Views\CheckflightAvailablity\flightAvailableData.cshtml" />
     <Content Include="Views\CheckflightAvailablity\Index.cshtml" />
     <Content Include="Views\CheckflightAvailablity\Appliedfilter.cshtml" />
+    <Content Include="Views\SeatMap\CheckFlightSeatAvailablity.cshtml" />
+    <Content Include="Views\FlightBookingdetails\Bookingdetails.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-    <Folder Include="Views\SeatMap\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -314,6 +366,9 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

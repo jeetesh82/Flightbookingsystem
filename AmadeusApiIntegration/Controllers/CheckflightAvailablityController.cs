@@ -261,43 +261,128 @@ namespace AmadeusApiIntegration.Controllers
         }
 
         [HttpPost]
-        public ActionResult Appliedfilter(string selectedValue)
+
+        public ActionResult Appliedfilter(string selectedValue1, string selectedValue2, string selectedValue3)
         {
             ViewData["Originlocation"] = Session["OriginLocation"];
             ViewData["Destinationlocation"] = Session["destinationLocation"];
 
-            if (Session["flightdata"] != null && selectedValue != null && selectedValue == "true")
+            if (selectedValue1 != "true" && selectedValue2 != "false" || selectedValue1=="true" && selectedValue2==null && selectedValue3==null 
+              || selectedValue2 == "false" && selectedValue1 == null && selectedValue3 == null || selectedValue3 == "cheapprice" && selectedValue2 == null && selectedValue1 == null)
             {
-                fligSearofferRoot allflightdata = (fligSearofferRoot)Session["flightdata"];
-                var oneway = (from x in allflightdata.data
-                             where x.itineraries.Select(y=>y.segments.Count()).Count()==1
-                             select x).ToList();
-                            
-                if (selectedValue != null && selectedValue == "true" && oneway.Count()==0 ) 
-                {
 
-                    var roundtripnonstopflights = new List<fligSearofferDatum>();
-                    foreach (var item in allflightdata.data)
+                // Nonstop/One Way filter
+                if (Session["flightdata"] != null && selectedValue1 != null && selectedValue1 == "true")
+                {
+                    fligSearofferRoot allflightdata = (fligSearofferRoot)Session["flightdata"];
+                    var oneway = (from x in allflightdata.data
+                                  where x.itineraries.Select(y => y.segments.Count()).Count() == 1
+                                  select x).ToList();
+
+                    if (selectedValue1 != null && selectedValue1 == "true" && oneway.Count() == 0)
                     {
 
-                        int inbouundsegment = item.itineraries[0].segments.Count();
-                        int outboundsegment = item.itineraries[1].segments.Count();
-                        if (inbouundsegment == 1 && outboundsegment == 1)
+                        var roundtripnonstopflights = new List<fligSearofferDatum>();
+                        foreach (var item in allflightdata.data)
                         {
-                            roundtripnonstopflights.Add(item);
+
+                            int inbouundsegment = item.itineraries[0].segments.Count();
+                            int outboundsegment = item.itineraries[1].segments.Count();
+                            if (inbouundsegment == 1 && outboundsegment == 1)
+                            {
+                                roundtripnonstopflights.Add(item);
+                            }
+
+
                         }
 
 
+                        if (roundtripnonstopflights.Any())
+                        {
+
+                            allflightdata.data = roundtripnonstopflights.ToList();
+                            ModelState.Clear();
+                            //return RedirectToAction("Appliedfilter", allflightdata);
+                            return View(allflightdata);
+                            //return Json(allflightdata, JsonRequestBehavior.AllowGet);
+
+                        }
+                        else
+                        {
+                            allflightdata = null;
+                            ModelState.Clear();
+                            return View(allflightdata);
+                        }
+
                     }
-
-
-                    if (roundtripnonstopflights.Any())
+                    else
+                    {
+                        return View(allflightdata);
+                    }
+                }
+                // One Stop filter
+                else if (Session["flightdata"] != null && selectedValue2 != null && selectedValue2 == "false")
+                {
+                    fligSearofferRoot allflightdata = (fligSearofferRoot)Session["flightdata"];
+                    var oneway = (from x in allflightdata.data
+                                  where x.itineraries.Select(y => y.segments.Count()).Count() > 1
+                                  select x).ToList();
+                    if (selectedValue2 != null && selectedValue2 == "false" && oneway.Count() != 0)
                     {
 
-                        allflightdata.data = roundtripnonstopflights.ToList();
-                        ModelState.Clear();
-                        //return RedirectToAction("Appliedfilter", allflightdata);
+                        var roundtripOnestopflights = new List<fligSearofferDatum>();
+                        foreach (var item in allflightdata.data)
+                        {
+
+                            int inbouundsegment = item.itineraries[0].segments.Count();
+                            int outboundsegment = item.itineraries[1].segments.Count();
+                            if (inbouundsegment == 2 && outboundsegment == 2 || inbouundsegment == 1 && outboundsegment == 2 || inbouundsegment == 2 && outboundsegment == 1)
+                            {
+                                roundtripOnestopflights.Add(item);
+                            }
+
+
+                        }
+
+
+                        if (roundtripOnestopflights.Any())
+                        {
+
+                            allflightdata.data = roundtripOnestopflights.ToList();
+                            ModelState.Clear();
+                            return View(allflightdata);
+                            //return Json(allflightdata, JsonRequestBehavior.AllowGet);
+
+                        }
+                        else
+                        {
+                            allflightdata = null;
+                            ModelState.Clear();
+                            return View(allflightdata);
+                        }
+
+                    }
+                    else
+                    {
+                        allflightdata = null;
                         return View(allflightdata);
+                    }
+                }
+                // Cheapest Price filter
+                else if (Session["flightdata"] != null && selectedValue3 != null && selectedValue3 == "cheapprice")
+                {
+                    fligSearofferRoot allflightdata = (fligSearofferRoot)Session["flightdata"];
+                    if (selectedValue3 != null && selectedValue3 == "cheapprice")
+                    {
+
+                        var Cheapest_Price = allflightdata.data.Min(x => Convert.ToDouble(x.price.grandTotal));
+                        var listofMinpricedata = (from x in allflightdata.data
+                                                  where x.price.grandTotal.Contains(Cheapest_Price.ToString())
+                                                  select x).ToList();
+                        allflightdata.data = listofMinpricedata;
+                        ModelState.Clear();
+                        return View(allflightdata);
+
                         //return Json(allflightdata, JsonRequestBehavior.AllowGet);
 
                     }
@@ -309,18 +394,15 @@ namespace AmadeusApiIntegration.Controllers
                     }
 
                 }
-                else
-                {
-                    return View(allflightdata);
-                }
             }
-            else if (Session["flightdata"] != null && selectedValue != null && selectedValue == "false")
+            // one Way/Non stop and One Stop
+            else if (Session["flightdata"] != null && selectedValue1 == "true" && selectedValue2 == "false")
             {
                 fligSearofferRoot allflightdata = (fligSearofferRoot)Session["flightdata"];
                 var oneway = (from x in allflightdata.data
-                              where x.itineraries.Select(y => y.segments.Count()).Count() >1
+                              where x.itineraries.Select(y => y.segments.Count()).Count() == 1
                               select x).ToList();
-                if (selectedValue != null && selectedValue == "false" && oneway.Count()!=0)
+                if (selectedValue1 == "true" && selectedValue2 == "false" && oneway.Count() == 0)
                 {
 
                     var roundtripOnestopflights = new List<fligSearofferDatum>();
@@ -329,7 +411,7 @@ namespace AmadeusApiIntegration.Controllers
 
                         int inbouundsegment = item.itineraries[0].segments.Count();
                         int outboundsegment = item.itineraries[1].segments.Count();
-                        if (inbouundsegment == 2 && outboundsegment == 2 || inbouundsegment == 1 && outboundsegment == 2 || inbouundsegment == 2 && outboundsegment == 1)
+                        if (inbouundsegment == 1 && outboundsegment == 1 || inbouundsegment == 2 && outboundsegment == 2 || inbouundsegment == 1 && outboundsegment == 2 || inbouundsegment == 2 && outboundsegment == 1)
                         {
                             roundtripOnestopflights.Add(item);
                         }
@@ -357,32 +439,109 @@ namespace AmadeusApiIntegration.Controllers
                 }
                 else
                 {
-                    allflightdata = null;
+
                     return View(allflightdata);
                 }
-            }
 
-            else if (Session["flightdata"] != null && selectedValue != null && selectedValue == "cheapprice")
+            }
+            // One Way and Cheapest price
+            else if (Session["flightdata"] != null && selectedValue1 == "true" && selectedValue3 == "cheapprice")
             {
                 fligSearofferRoot allflightdata = (fligSearofferRoot)Session["flightdata"];
-                if (selectedValue != null && selectedValue == "cheapprice")
+                var oneway = (from x in allflightdata.data
+                              where x.itineraries.Select(y => y.segments.Count()).Count() == 1
+                              select x).ToList();
+                if (selectedValue1 == "true" && selectedValue3 == "cheapprice" && oneway.Count() == 0)
                 {
-                   
-                    var Cheapest_Price = allflightdata.data.Min(x => Convert.ToDouble(x.price.grandTotal));
-                    var listofMinpricedata = (from x in allflightdata.data
-                                           where x.price.grandTotal.Contains(Cheapest_Price.ToString())
-                                           select x).ToList();
-                    allflightdata.data = listofMinpricedata;
-                    ModelState.Clear();
-                    return View(allflightdata);
 
-                    //return Json(allflightdata, JsonRequestBehavior.AllowGet);
+                    var roundtripOnestopflights = new List<fligSearofferDatum>();
+                    foreach (var item in allflightdata.data)
+                    {
+
+                        int inbouundsegment = item.itineraries[0].segments.Count();
+                        int outboundsegment = item.itineraries[1].segments.Count();
+                        if (inbouundsegment == 1 && outboundsegment == 1 )
+                        {
+                            roundtripOnestopflights.Add(item);
+                        }
+
+
+                    }
+
+
+                    if (roundtripOnestopflights.Any())
+                    {
+
+                        allflightdata.data = roundtripOnestopflights.ToList();
+                        var cheapestprice_Sorting=allflightdata.data.OrderBy(x=>Convert.ToDouble(x.price.grandTotal)).ToList();
+                        ModelState.Clear();
+                        cheapestprice_Sorting = allflightdata.data;
+                        return View(allflightdata);
+                        //return Json(allflightdata, JsonRequestBehavior.AllowGet);
+
+                    }
+                    else
+                    {
+                        allflightdata = null;
+                        ModelState.Clear();
+                        return View(allflightdata);
+                    }
+
+                }
+                else
+                {
+
+                    return View(allflightdata);
+                }
+
+            }
+            // One Stop and Cheapest price
+            else if (Session["flightdata"] != null && selectedValue2 == "false" && selectedValue3 == "cheapprice")
+            {
+                fligSearofferRoot allflightdata = (fligSearofferRoot)Session["flightdata"];
+                var oneway = (from x in allflightdata.data
+                              where x.itineraries.Select(y => y.segments.Count()).Count() > 1
+                              select x).ToList();
+                if (selectedValue3 == "cheapprice" && selectedValue2 == "false" && oneway.Count() != 0)
+                {
+
+                    var roundtripOnestopflights = new List<fligSearofferDatum>();
+                    foreach (var item in allflightdata.data)
+                    {
+
+                        int inbouundsegment = item.itineraries[0].segments.Count();
+                        int outboundsegment = item.itineraries[1].segments.Count();
+                        if (inbouundsegment == 2 && outboundsegment == 2 || inbouundsegment == 1 && outboundsegment == 2 || inbouundsegment == 2 && outboundsegment == 1)
+                        {
+                            roundtripOnestopflights.Add(item);
+                        }
+
+
+                    }
+
+
+                    if (roundtripOnestopflights.Any())
+                    {
+
+                        allflightdata.data = roundtripOnestopflights.ToList();
+                        var cheapestprice_Sorting = allflightdata.data.OrderBy(x => Convert.ToDouble(x.price.grandTotal)).ToList();
+                        ModelState.Clear();
+                        cheapestprice_Sorting = allflightdata.data;
+                        return View(allflightdata);
+                        //return Json(allflightdata, JsonRequestBehavior.AllowGet);
+
+                    }
+                    else
+                    {
+                        allflightdata = null;
+                        ModelState.Clear();
+                        return View(allflightdata);
+                    }
 
                 }
                 else
                 {
                     allflightdata = null;
-                    ModelState.Clear();
                     return View(allflightdata);
                 }
 
@@ -392,6 +551,7 @@ namespace AmadeusApiIntegration.Controllers
                 return RedirectToAction("flightAvailableData");
                 //return View("Appliedfilter");
             }
+
 
             return View("Appliedfilter");
         }

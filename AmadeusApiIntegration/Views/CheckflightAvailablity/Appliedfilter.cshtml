@@ -142,9 +142,12 @@
                             View Flight Details
                         </button>
                         <br /><br />
-                        <button style="background-image: linear-gradient(97deg,#53b2fe,#065af3 130%); padding: 5px 43px; border-radius: 15px; " class="btn btn-primary" onclick="HideShow()" role="button">
-                            Book Now
-                        </button>
+                        @using (Html.BeginForm("CheckFlightSeatAvailablity", "SeatMap", FormMethod.Post))
+                        {
+                            <button style="background-image: linear-gradient(97deg,#53b2fe,#065af3 130%); padding: 5px 43px; border-radius: 15px; " name="getFlightId" class="btn btn-primary" value="@item.id">
+                                Book Now
+                            </button>
+                        }
                     </div>
                 </div>
             </div>
@@ -265,9 +268,12 @@
                                     View Flight Details
                                 </button>
                                 <br /><br />
-                                <button style="background-image: linear-gradient(97deg,#53b2fe,#065af3 130%); padding: 5px 43px; border-radius: 15px; " class="btn btn-primary" onclick="HideShow()" role="button">
-                                    Book Now
-                                </button>
+                                @using (Html.BeginForm("CheckFlightSeatAvailablity", "SeatMap", FormMethod.Post))
+                                {
+                                    <button style="background-image: linear-gradient(97deg,#53b2fe,#065af3 130%); padding: 5px 43px; border-radius: 15px; " name="getFlightId" class="btn btn-primary" value="@item.id">
+                                        Book Now
+                                    </button>
+                                }
                             </div>
                         </div>
                     </div>

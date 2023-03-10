@@ -1,0 +1,98 @@
+﻿@model AmadeusApiIntegration.Models.SeatMapApiHelperResponse
+
+@{
+    ViewBag.Title = "CheckFlightSeatAvailablity";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .sliver-box1 {
+        width: 40px;
+        height: 40px;
+        margin: 10px 10px 10px 0;
+        padding: 10px;
+        color: black;
+        background-color: green;
+        border: 1px solid black;
+    }
+    .sliver-box1 a{
+        color:black;
+     }
+    .sliver-box2 {
+            width: 40px;
+            height: 40px;
+            margin: 10px 10px 10px 0;
+            padding: 10px;
+            color: black;
+            background-color: red;
+            border: 1px solid black;
+        }
+    .sliver-box2 a {
+        color: black;
+    }
+
+    .card {
+        padding-top: 4%;
+        padding-left: 5%;
+        
+    }
+
+    .card-body {
+        width: 70%;
+        border: 1px solid;
+        justify-content: center;
+        padding: 30px 10px 200% 50px;
+        background-color: lightgray;
+     
+    }
+</style>
+
+@foreach (var item in Model.data)
+{
+    foreach (var deck in item.decks)
+    {
+
+        <div class="card text-center">
+            <div class="card-body">
+
+                @using System.Linq
+                @{var seatNumber = deck.seats.Select(x => x.number).ToList(); }
+                @{var Seatdetails = (from x in deck.seats select new 
+                                       {
+                                         Cabin=x.cabin,
+                                         SeatNo=x.number,
+                                         checkSeatStatus=x.travelerPricing.Select(y=>y.seatAvailabilityStatus).ToList()
+                                       }).ToList(); }
+                @foreach (var chooseSeat in Seatdetails)
+                {
+                    if (string.Equals(chooseSeat.checkSeatStatus[0], "AVAILABLE"))
+                    {
+                        <div class="col-md-2">
+                            <div class="sliver-box1"><a id="Aviseat" title="The Available Seat is @chooseSeat.SeatNo, @chooseSeat.Cabin " href="">@chooseSeat.SeatNo</a></div>
+
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-md-2">
+                            <div class="sliver-box2"><a id="Ocpseat" title="This Seat is Occupied, @chooseSeat.Cabin " href="">@chooseSeat.SeatNo</a></div>
+
+                        </div>
+                    }
+
+                }
+            </div>
+        </div>
+
+    }
+}
+
+<script>
+    $(function () {
+
+        $("#Aviseat").tooltip();
+            $("#Ocpseat").tooltip();
+          
+    });
+   
+
+</script>
